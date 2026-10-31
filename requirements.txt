@@ -1,0 +1,11 @@
+python-dotenv
+fastapi
+uvicorn
+python-multipart
+requests
+beautifulsoup4
+playwright
+sentence-transformers
+langchain-core
+langchain-openai
+langgraph
