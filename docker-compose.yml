@@ -1,0 +1,21 @@
+services:
+  n8n:
+    image: n8nio/n8n:latest   # pin to the version you used, e.g. n8nio/n8n:1.x.x
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - GENERIC_TIMEZONE=Asia/Kuala_Lumpur
+      - TZ=Asia/Kuala_Lumpur
+      # Telegram needs a public HTTPS URL (ngrok / cloudflared tunnel), or leave as localhost
+      - WEBHOOK_URL=${WEBHOOK_URL:-http://localhost:5678/}
+    extra_hosts:
+      # lets n8n (inside Docker) reach the food agent running on your computer
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:

@@ -1,0 +1,132 @@
+{
+  "name": "Food-analysis",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        16,
+        -48
+      ],
+      "id": "aba2039a-b14e-4bc3-a845-93f9182f7309",
+      "name": "Get a file",
+      "webhookId": "6fc71628-1965-434f-bc9e-f00d9ae2f06c",
+      "credentials": {
+        "telegramApi": {
+          "id": "4Q4ESaqqYNF2B5DF",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\nconst nutritionResults = input.nutrition;\n\nlet message = \"🍱 FOOD ANALYSIS\\n\";\nmessage += \"====================\\n\\n\";\n\nconst totals = {};\n\n// Loop through each food component\nfor (const food of nutritionResults) {\n\n    message += `🍽️ ${food.component}\\n`;\n    message += `Portion: ${food.portion_g} g\\n`;\n    message += `Food: ${food.food.name}\\n`;\n    message += `Food ID: ${food.food.food_id}\\n\\n`;\n\n    message += \"Nutrition:\\n\";\n\n    // food.nutrition contains the actual nutrients\n    for (const [nutrient, data] of Object.entries(food.nutrition)) {\n\n        message += `${nutrient}: ${data.value.toFixed(2)} ${data.unit}\\n`;\n\n        // Add to totals\n        if (!totals[nutrient]) {\n            totals[nutrient] = {\n                value: 0,\n                unit: data.unit\n            };\n        }\n\n        totals[nutrient].value += data.value;\n    }\n\n    message += \"\\n--------------------\\n\\n\";\n}\n\n\n// Total nutrition\nmessage += \"📊 TOTAL NUTRITION\\n\";\nmessage += \"====================\\n\\n\";\n\nfor (const [nutrient, data] of Object.entries(totals)) {\n\n    message += `${nutrient}: ${data.value.toFixed(2)} ${data.unit}\\n`;\n}\n\n\nreturn [\n    {\n        json: {\n            message: message\n        }\n    }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        -48
+      ],
+      "id": "ba33567b-55a5-49eb-a676-ae557a34e8a6",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/analyze-food",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "=data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        256,
+        -48
+      ],
+      "id": "bd828f0a-e92d-45dc-8db8-86471b84c8a0",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "file_id"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -224,
+        -48
+      ],
+      "id": "1bd1c8c2-b7c5-47a3-be13-72d7db06b852",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2ef917ba-aee9-403e-8278-0ff7eb818623",
+  "meta": {},
+  "nodeGroups": [],
+  "id": "PAHz6UVo8ynz79n2",
+  "tags": []
+}
