@@ -1,6 +1,7 @@
 # Food Nutrition Agent
 
 A Python (FastAPI + LangGraph) service that takes a food photo, identifies the dish and its components with a vision LLM, matches each component against the Malaysian Food Composition Database (MyFCD) and USDA, and returns the nutrition values.
+![Uploading image.png…]()
 
 ## Setup
 
