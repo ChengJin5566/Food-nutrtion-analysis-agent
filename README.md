@@ -1,5 +1,6 @@
 # Food Nutrition Agent
-<img width="600" height="634" alt="image" src="https://github.com/user-attachments/assets/b6d589be-1b10-48fa-bb9c-5fec822e55e5" />
+<img width="664" height="714" alt="image" src="https://github.com/user-attachments/assets/360a4f34-af09-4a4c-be88-3724f380621c" />
+
 
 Send a photo of a meal on Telegram and get back its nutrition breakdown.
 
