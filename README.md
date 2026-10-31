@@ -2,7 +2,7 @@
 
 A Python (FastAPI + LangGraph) telegram agent service that takes a food photo, identifies the dish and its components with a vision LLM, matches each component against the Malaysian Food Composition Database (MyFCD) and USDA, and returns the nutrition values.
 
-<img width="846" height="863" alt="image" src="https://github.com/user-attachments/assets/3fb42bb4-bdd5-4a96-a5d9-fcd0967521b9" />
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/3fb42bb4-bdd5-4a96-a5d9-fcd0967521b9" />
 
 ## Setup
 
